@@ -349,6 +349,47 @@ let trim s =
   of_string "  hello world" |> trim |> to_string = "hello world"
 *)
 
+let for_all ~f s =
+  try ignore (index_pred s ~f:(fun c -> not (f c))); false
+  with Not_found -> true
+
+let exists ~f s =
+  try ignore (index_pred s ~f); true
+  with Not_found -> false
+
+let split_gen ~by s =
+  let stop = ref false in
+  let cur_sub = ref s in (* suffix slice of [s] *)
+  (* line generator *)
+  let g() =
+    if !stop then None
+    else
+      try
+        let i = index ~c:by !cur_sub in
+        let slice = B.sub !cur_sub 0 i in
+        cur_sub := B.sub !cur_sub (i+1) (size !cur_sub - i-1);
+        Some slice
+      with Not_found ->
+        stop := true;
+        if size !cur_sub > 0 then Some !cur_sub else None
+  in
+  g
+
+let split ~by s =
+  let rec gen_to_list acc g = match g() with
+    | None -> List.rev acc
+    | Some x -> gen_to_list (x::acc) g
+  in
+  gen_to_list [] (split_gen ~by s)
+
+let lines_gen s = split_gen ~by:'\n' s
+let lines s = split ~by:'\n' s
+
+(*$T
+  empty |> lines = []
+  of_string "ab\ncde\nfg\nh" |> lines |> List.map to_string = ["ab"; "cde"; "fg"; "h"]
+*)
+
 (** {2 Memory-map} *)
 
 let map_file_descr ?pos ?(shared=false) fd len =

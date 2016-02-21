@@ -177,6 +177,25 @@ val rindex_pred : f:(char -> bool) -> t -> int
 val contains : t -> c:char -> bool
 (** [String.contains s c] tests if character [c] appears in the string [s]. *)
 
+val for_all : f:(char -> bool) -> t -> bool
+(** True for all chars? *)
+
+val exists : f:(char -> bool) -> t -> bool
+(** True for some char? *)
+
+val split : by:char -> t -> t list
+(** [split s ~by] splits [s] along the occurrences of [by]. *)
+
+val split_gen : by:char -> t -> t gen
+(** Same as {!split} but returns a generator *)
+
+val lines : t -> t list
+(** [lines s] returns a list of the lines of [s] (splits along '\n') *)
+
+val lines_gen : t -> t gen
+(** [lines_gen s] returns a generator of the lines of [s] (splits along '\n')
+    where every line is a slice of [s] *)
+
 (** {2 Memory-map} *)
 
 val with_map_file :
