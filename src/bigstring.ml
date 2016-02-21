@@ -24,9 +24,15 @@ let init size f =
 
 let fill = B.fill
 
+let fill_slice s c i len = fill (B.sub s i len) c
+
 let get = B.get
 
+let unsafe_get = B.unsafe_get
+
 let set = B.set
+
+let unsafe_set = B.unsafe_set
 
 let size = B.dim
 let length = B.dim
@@ -48,18 +54,33 @@ let copy a =
   *)
 
 let fold f acc a =
-  let rec fold' f acc a i len =
+  let rec aux f acc a i len =
     if i = len then acc
     else
       let acc = f acc (get a i) in
-      fold' f acc a (i+1) len
+      aux f acc a (i+1) len
   in
-  fold' f acc a 0 (size a)
+  aux f acc a 0 (size a)
+
+let foldi f acc a =
+  let rec aux f acc a i len =
+    if i = len then acc
+    else
+      let acc = f acc i (get a i) in
+      aux f acc a (i+1) len
+  in
+  aux f acc a 0 (size a)
 
 let iter f a =
   let n = size a in
   for i = 0 to n-1 do
     f (B.unsafe_get a i)
+  done
+
+let iteri f a =
+  let n = size a in
+  for i = 0 to n-1 do
+    f i (B.unsafe_get a i)
   done
 
 let rec equal_rec a b i len =
@@ -177,6 +198,13 @@ let blit_of_string a i b j len =
     B.set b (j+x) (String.get a (i+x))
   done
 
+let blit_of_buffer buf i s j len =
+  if i < 0 || j < 0 || i+len > Buffer.length buf || j+len > size s
+    then invalid_arg "Bigstring.blit_of_buffer";
+  for x=0 to len-1 do
+    B.set s (j+x) (Buffer.nth buf (i+x))
+  done
+
 let to_seq a k = iter k a
 
 let to_gen a =
@@ -200,6 +228,8 @@ let to_seq_slice a i len =
 let to_gen_slice a i len =
   to_gen (sub a i len)
 
+let to_buffer s buf = iter (Buffer.add_char buf) s
+
 let print out s =
   Format.pp_print_char out '"';
   iter
@@ -217,6 +247,107 @@ let print out s =
   (Format.asprintf "%a" print (init 3 (fun i->Char.chr (i+65)))) "\"ABC\""
 *)
 
+(** {2 Utils} *)
+
+let concat sep l =
+  let len_sep = String.length sep in
+  (* compute length of result *)
+  let len =
+    List.fold_left
+      (fun n s ->
+        let n = if n>0 then n+len_sep else n in (* add length of separator *)
+        n + length s)
+      0 l
+  in
+  (* allocate result *)
+  let res = create len in
+  let i = ref 0 in
+  List.iteri
+    (fun j s ->
+      if j>0 then (
+        blit_of_string sep 0 res !i len_sep;
+        i := !i + len_sep
+      );
+      blit s 0 res !i (length s);
+      i := !i + length s)
+    l;
+  assert (!i = len);
+  res
+
+(*$T
+  concat ";" [of_string "ab"; of_string "cd"; of_string "ef"] |> to_string = "ab;cd;ef"
+  concat "yolo" [] |> to_string = ""
+  concat "" [of_string "a"; of_string "bc"; of_string ""; of_string "d"] |> to_string = "abcd"
+*)
+
+let map ~f s = init (length s) (fun i -> f (unsafe_get s i))
+
+let mapi ~f s = init (length s) (fun i -> f i (unsafe_get s i))
+
+let lowercase s = map ~f:Char.lowercase s
+
+let uppercase s = map ~f:Char.uppercase s
+
+let index_pred ~f s =
+  let rec aux f s i =
+    if i=size s then raise Not_found
+    else if f (unsafe_get s i) then i
+    else aux f s (i+1)
+  in
+  aux f s 0
+
+let rindex_pred ~f s =
+  let rec aux f s i =
+    if i= ~-1 then raise Not_found
+    else if f (unsafe_get s i) then i
+    else aux f s (i-1)
+  in
+  aux f s (size s-1)
+
+let index s ~c = index_pred s ~f:(fun c' -> c=c')
+
+(*$T
+  index (of_string "abcdabcd") ~c:'a' = 0
+  index (of_string "abcdabcd") ~c:'c' = 2
+  try ignore (index (of_string "abcdabcd") ~c:'e'); false with Not_found -> true
+*)
+
+let rindex s ~c = rindex_pred s ~f:(fun c' -> c=c')
+
+(*$T
+  rindex (of_string "abcdabcd") ~c:'a' = 4
+  rindex (of_string "abcdabcd") ~c:'c' = 6
+  try ignore (rindex (of_string "abcdabcd") ~c:'e'); false with Not_found -> true
+*)
+
+let contains s ~c =
+  try ignore (index s ~c); true
+  with Not_found -> false
+
+(*$T
+  of_string "abcd" |> contains ~c:'a'
+  of_string "abcd" |> contains ~c:'c'
+  not (of_string "abcd" |> contains ~c:'e')
+*)
+
+let is_not_white_ = function ' ' | '\t' | '\r' | '\n' | '\012' -> false | _ -> true
+
+let trim s =
+  try
+    let i = index_pred s ~f:is_not_white_ in
+    let j = rindex_pred s ~f:is_not_white_ in
+    assert (i<j);
+    let len = j+1-i in
+    sub s i len
+  with Not_found -> empty
+
+(*$T
+  trim empty |> to_string = ""
+  of_string "    \t\n\r\012   " |> trim |> to_string = ""
+  of_string "  hello world  \n" |> trim |> to_string = "hello world"
+  of_string "hello world  \n" |> trim |> to_string = "hello world"
+  of_string "  hello world" |> trim |> to_string = "hello world"
+*)
 
 (** {2 Memory-map} *)
 
