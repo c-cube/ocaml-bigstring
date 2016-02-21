@@ -262,12 +262,14 @@ let concat sep l =
   (* allocate result *)
   let res = create len in
   let i = ref 0 in
-  List.iteri
-    (fun j s ->
-      if j>0 then (
+  let j = ref 0 in
+  List.iter
+    (fun s ->
+      if !j > 0 then (
         blit_of_string sep 0 res !i len_sep;
         i := !i + len_sep
       );
+      incr j;
       blit s 0 res !i (length s);
       i := !i + length s)
     l;
