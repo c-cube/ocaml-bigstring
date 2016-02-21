@@ -11,7 +11,7 @@ remove: [
     ["ocamlfind" "remove" "bigstring"]
 ]
 depends: [
-  "ocamlfind"
+  "ocamlfind" {build}
   "base-bigarray"
   "base-bytes"
   "ocamlbuild" {build}
