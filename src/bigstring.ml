@@ -59,7 +59,7 @@ let fold f acc a =
 let iter f a =
   let n = size a in
   for i = 0 to n-1 do
-    f (get a i)
+    f (B.unsafe_get a i)
   done
 
 let rec equal_rec a b i len =
@@ -112,23 +112,23 @@ let of_bytes b =
   init (Bytes.length b) (fun i -> Bytes.get b i)
 
 let of_bytes_slice b i len =
-  if i < 0 || i+len > Bytes.length b then invalid_arg "CCBigstring";
+  if i < 0 || i+len > Bytes.length b then invalid_arg "Bigstring.of_bytes";
   init len (fun j -> Bytes.get b (i+j))
 
 let sub_bytes a i len =
-  if i < 0 || i+len > size a then invalid_arg "CCBigstring";
+  if i < 0 || i+len > size a then invalid_arg "Bigstring.sub_bytes";
   Bytes.init len (fun j -> B.get a (i+j))
 
 let blit_to_bytes a i b j len =
   if i < 0 || j < 0 || i+len > size a || j+len > Bytes.length b
-    then invalid_arg "CCBigstring";
+    then invalid_arg "Bigstring.blit_to_bytes";
   for x=0 to len-1 do
     Bytes.set b (j+x) (B.get a (i+x))
   done
 
 let blit_of_bytes a i b j len =
   if i < 0 || j < 0 || i+len > Bytes.length a || j+len > size b
-    then invalid_arg "CCBigstring";
+    then invalid_arg "Bigstring.blit_of_bytes";
   for x=0 to len-1 do
     B.set b (j+x) (Bytes.get a (i+x))
   done
@@ -145,7 +145,7 @@ let of_string s =
   init (String.length s) (fun i -> String.get s i)
 
 let of_string_slice s i len =
-  if i < 0 || i+len > String.length s then invalid_arg "CCBigstring";
+  if i < 0 || i+len > String.length s then invalid_arg "Bigstring.of_string_slice";
   init len (fun j -> String.get s (i+j))
 
 let of_buffer b =
@@ -163,7 +163,7 @@ let of_gen g =
   of_buffer b
 
 let sub_string a i len =
-  if i < 0 || i+len > size a then invalid_arg "CCBigstring";
+  if i < 0 || i+len > size a then invalid_arg "Bigstring.sub_string";
   str_init_ len (fun j -> B.get a (i+j))
 
 (*$T
@@ -172,7 +172,7 @@ let sub_string a i len =
 
 let blit_of_string a i b j len =
   if i < 0 || j < 0 || i+len > String.length a || j+len > size b
-    then invalid_arg "CCBigstring";
+    then invalid_arg "Bigstring.blit_of_string";
   for x=0 to len-1 do
     B.set b (j+x) (String.get a (i+x))
   done
@@ -207,9 +207,16 @@ let print out s =
       | '\n' -> Format.pp_print_string out "\\n"
       | '\t' -> Format.pp_print_string out "\\t"
       | '\\' -> Format.pp_print_string out "\\\\"
-      | c -> Format.pp_print_char out c
-    ) s;
+      | '\000' -> Format.pp_print_string out "\\000"
+      | c -> Format.pp_print_char out c)
+    s;
   Format.pp_print_char out '"'
+
+(*$= & ~printer:(fun s->s)
+  (Format.asprintf "%a" print (create 3)) "\"\\000\\000\\000\""
+  (Format.asprintf "%a" print (init 3 (fun i->Char.chr (i+65)))) "\"ABC\""
+*)
+
 
 (** {2 Memory-map} *)
 

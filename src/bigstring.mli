@@ -35,14 +35,20 @@ val get : t -> int -> char
 val set : t -> int -> char -> unit
 
 val blit : t -> int -> t -> int -> int -> unit
-(** Blit a slice of the bigstring into another *)
+(** Blit a slice of the bigstring into another.
+    [blit s1 i1 s2 i2 len] means that elements from [s1] whose indices
+    range from [i1] to [i1+len-1] are copied into the slots of [s2]
+    whose indices range from [i2] to [i2+len-1]. This is similar to
+    {!String.blit} or {!Bytes.blit} or {!Array.blit}. *)
 
 val copy : t -> t
 (** Copy of the string *)
 
 val sub : t -> int -> int -> t
 (** [sub s i len] takes a slice of length [len] from the string [s], starting
-    at offset [i].
+    at offset [i]. The slice shares the same memory as [s], meaning that
+    modifications of the slice will modify [s] as well.
+    Slicing is cheap since it does not involve copying  the whole range.
     @raise Invalid_argument if [i, len] doesn't designate a valid substring *)
 
 val fold : ('a -> char -> 'a) -> 'a -> t -> 'a
@@ -50,6 +56,7 @@ val fold : ('a -> char -> 'a) -> 'a -> t -> 'a
 val iter : (char -> unit) -> t -> unit
 
 val equal : t -> t -> bool
+(** Equality of content. *)
 
 val compare : t -> t -> int
 (** Lexicographic order *)
