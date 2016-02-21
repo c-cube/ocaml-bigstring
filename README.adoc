@@ -1,0 +1,9 @@
+= Bigstring =
+:source-highlighter: pygments
+
+A set of utils for dealing with `bigarrays` of `char` as if they were proper
+OCaml strings.
+
+== License
+
+This code is free, under the BSD license.

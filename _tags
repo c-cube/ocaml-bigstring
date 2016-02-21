@@ -1,0 +1,2 @@
+<src>: include
+<src/**/*>: warn(+a-4-44), safe_string
