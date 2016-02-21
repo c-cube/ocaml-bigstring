@@ -1,4 +1,6 @@
 opam-version: "1.2"
+name: "bigstring"
+version: "0.1"
 maintainer: "simon.cruanes.2007@m4x.org"
 author: "Simon Cruanes"
 build: [

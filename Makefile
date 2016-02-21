@@ -2,7 +2,7 @@
 OPTS=-use-ocamlfind
 FLAGS= -w +a-4-44 -safe-string
 TARGETS = bigstring.cma bigstring.cmxa bigstring.cmxs
-TO_INSTALL = $(addprefix _build/src/, $(TARGETS) bigstring.cmi)
+TO_INSTALL = $(addprefix _build/src/, $(TARGETS) bigstring.cmi bigstring.a)
 
 all:
 	ocamlbuild $(OPTS) $(TARGETS)
