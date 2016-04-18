@@ -17,6 +17,16 @@ install: all
 uninstall:
 	ocamlfind remove bigstring
 
+doc:
+	ocamlbuild $(OPTS) src/bigstring.docdir/index.html
+
+upload-doc: doc
+	git checkout gh-pages && \
+	  rm -rf dev/ && \
+	  mkdir -p dev && \
+	  cp -r bigstring.docdir/* dev/ && \
+	  git add --all dev
+
 QTEST_PREAMBLE=""
 QTESTABLE=$(filter-out $(DONTTEST), \
 	$(wildcard src/*.ml) \
