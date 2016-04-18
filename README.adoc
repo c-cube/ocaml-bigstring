@@ -31,6 +31,11 @@ val str : string = "__"
 - : B.t = "a__d"
 ----
 
+== Documentation
+
+- [dev](c-cube.github.io/ocaml-bigstring/dev)
+- [0.1](c-cube.github.io/ocaml-bigstring/0.1)
+
 == License
 
 This code is free, under the BSD license.
