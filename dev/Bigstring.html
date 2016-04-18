@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Bigstring" rel="Chapter" href="Bigstring.html"><link title="Interface to 1-dimension Bigarrays of bytes (char)" rel="Section" href="#1_Interfaceto1dimensionBigarraysofbyteschar">
+<link title="Conversions" rel="Subsection" href="#2_Conversions">
+<link title="Utils" rel="Subsection" href="#2_Utils">
+<link title="Memory-map" rel="Subsection" href="#2_Memorymap">
+<title>Bigstring</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Bigstring.html">Bigstring</a></h1>
+
+<pre><span class="keyword">module</span> Bigstring: <code class="code">sig</code> <a href="Bigstring.html">..</a> <code class="code">end</code></pre><div class="info module top">
+<h1 id="1_Interfaceto1dimensionBigarraysofbyteschar">Interface to 1-dimension Bigarrays of bytes (char)</h1>
+<p>
+
+    A "bigstring" here is simply a bigarray of chars. It can be used instead
+    of regular strings when IO involve calling C (or another language),
+    when very large strings are required, or for memory-mapping.<br>
+</div>
+<hr width="100%">
+
+<pre><span id="TYPEgen"><span class="keyword">type</span> <code class="type">'a</code> gen</span> = <code class="type">unit -> 'a option</code> </pre>
+
+
+<pre><span id="TYPEsequence"><span class="keyword">type</span> <code class="type">'a</code> sequence</span> = <code class="type">('a -> unit) -> unit</code> </pre>
+
+
+<pre><span id="TYPEprinter"><span class="keyword">type</span> <code class="type">'a</code> printer</span> = <code class="type">Format.formatter -> 'a -> unit</code> </pre>
+
+<br>
+<h1 id="1_Interfaceto1dimensionBigarraysofbyteschar">Interface to 1-dimension Bigarrays of bytes (char)</h1>
+<p>
+
+    A "bigstring" here is simply a bigarray of chars. It can be used instead
+    of regular strings when IO involve calling C (or another language),
+    when very large strings are required, or for memory-mapping.<br>
+
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> = <code class="type">(char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t</code> </pre>
+
+
+<pre><span id="VALcreate"><span class="keyword">val</span> create</span> : <code class="type">int -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Create a new bigstring of the given size. Content is arbitrary.<br>
+</div>
+
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Empty string<br>
+</div>
+
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">int -> (int -> char) -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Initialize with the given function (called at every index).
+    <code class="code">init n f</code> is the string <code class="code">f 0, f 1, ..., f (n-1)</code>.<br>
+</div>
+
+<pre><span id="VALfill"><span class="keyword">val</span> fill</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> char -> unit</code></pre><div class="info ">
+Fill the string with the given byte.<br>
+</div>
+
+<pre><span id="VALfill_slice"><span class="keyword">val</span> fill_slice</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> char -> int -> int -> unit</code></pre><div class="info ">
+<code class="code">fill_slice s c i len</code> is the same as <code class="code">fill (sub s i len) c</code>, it
+    fills the slice from <code class="code">i</code> to <code class="code">i+len-1</code> of <code class="code">s</code> with the char <code class="code">c</code><br>
+</div>
+
+<pre><span id="VALsize"><span class="keyword">val</span> size</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int</code></pre><div class="info ">
+Number of bytes<br>
+</div>
+
+<pre><span id="VALlength"><span class="keyword">val</span> length</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int</code></pre><div class="info ">
+Alias for <a href="Bigstring.html#VALsize"><code class="code">Bigstring.size</code></a>.<br>
+</div>
+
+<pre><span id="VALget"><span class="keyword">val</span> get</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> char</code></pre><div class="info ">
+Obtain the byte at the given index.<br>
+<b>Raises</b> <code>Invalid_argument</code> if the index is invalid<br>
+</div>
+
+<pre><span id="VALunsafe_get"><span class="keyword">val</span> unsafe_get</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> char</code></pre><div class="info ">
+Same as <a href="Bigstring.html#VALget"><code class="code">Bigstring.get</code></a>, but without bound check. Can fail arbitrarily (including
+    segfault) if used improperly.<br>
+</div>
+
+<pre><span id="VALset"><span class="keyword">val</span> set</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> char -> unit</code></pre><div class="info ">
+Change the byte at the given index.<br>
+<b>Raises</b> <code>Invalid_argument</code> if the index is invalid<br>
+</div>
+
+<pre><span id="VALunsafe_set"><span class="keyword">val</span> unsafe_set</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> char -> unit</code></pre><div class="info ">
+Same as <a href="Bigstring.html#VALset"><code class="code">Bigstring.set</code></a>, but without bound check. Can fail arbitrarily (including
+    segfault) if used improperly.<br>
+</div>
+
+<pre><span id="VALblit"><span class="keyword">val</span> blit</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> <a href="Bigstring.html#TYPEt">t</a> -> int -> int -> unit</code></pre><div class="info ">
+Blit a slice of the bigstring into another.
+    <code class="code">blit s1 i1 s2 i2 len</code> means that elements from <code class="code">s1</code> whose indices
+    range from <code class="code">i1</code> to <code class="code">i1+len-1</code> are copied into the slots of <code class="code">s2</code>
+    whose indices range from <code class="code">i2</code> to <code class="code">i2+len-1</code>. This is similar to
+    <code class="code">String.blit</code> or <code class="code">Bytes.blit</code> or <code class="code">Array.blit</code>.<br>
+</div>
+
+<pre><span id="VALcopy"><span class="keyword">val</span> copy</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Copy of the string<br>
+</div>
+
+<pre><span id="VALsub"><span class="keyword">val</span> sub</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> int -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">sub s i len</code> takes a slice of length <code class="code">len</code> from the string <code class="code">s</code>, starting
+    at offset <code class="code">i</code>. The slice shares the same memory as <code class="code">s</code>, meaning that
+    modifications of the slice will modify <code class="code">s</code> as well.
+    Slicing is cheap since it does not involve copying  the whole range.<br>
+<b>Raises</b> <code>Invalid_argument</code> if <code class="code">i, len</code> doesn't designate a valid substring<br>
+</div>
+
+<pre><span id="VALfold"><span class="keyword">val</span> fold</span> : <code class="type">('a -> char -> 'a) -> 'a -> <a href="Bigstring.html#TYPEt">t</a> -> 'a</code></pre><div class="info ">
+Fold on every char in increasing order<br>
+</div>
+
+<pre><span id="VALfoldi"><span class="keyword">val</span> foldi</span> : <code class="type">('a -> int -> char -> 'a) -> 'a -> <a href="Bigstring.html#TYPEt">t</a> -> 'a</code></pre><div class="info ">
+Fold on every char in increasing order<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(char -> unit) -> <a href="Bigstring.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+Iterate on every char in increasing order<br>
+</div>
+
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> char -> unit) -> <a href="Bigstring.html#TYPEt">t</a> -> unit</code></pre><div class="info ">
+Iterate on every char in increasing order<br>
+</div>
+
+<pre><span id="VALequal"><span class="keyword">val</span> equal</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> -> bool</code></pre><div class="info ">
+Equality of content.<br>
+</div>
+
+<pre><span id="VALcompare"><span class="keyword">val</span> compare</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> -> int</code></pre><div class="info ">
+Lexicographic order<br>
+</div>
+<br>
+<h2 id="2_Conversions">Conversions</h2><br>
+
+<pre><span id="VALto_bytes"><span class="keyword">val</span> to_bytes</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> Bytes.t</code></pre>
+<pre><span id="VALof_bytes"><span class="keyword">val</span> of_bytes</span> : <code class="type">Bytes.t -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALof_bytes_slice"><span class="keyword">val</span> of_bytes_slice</span> : <code class="type">Bytes.t -> int -> int -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALsub_bytes"><span class="keyword">val</span> sub_bytes</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> int -> Bytes.t</code></pre>
+<pre><span id="VALblit_to_bytes"><span class="keyword">val</span> blit_to_bytes</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> Bytes.t -> int -> int -> unit</code></pre>
+<pre><span id="VALblit_of_bytes"><span class="keyword">val</span> blit_of_bytes</span> : <code class="type">Bytes.t -> int -> <a href="Bigstring.html#TYPEt">t</a> -> int -> int -> unit</code></pre>
+<pre><span id="VALblit_of_buffer"><span class="keyword">val</span> blit_of_buffer</span> : <code class="type">Buffer.t -> int -> <a href="Bigstring.html#TYPEt">t</a> -> int -> int -> unit</code></pre>
+<pre><span id="VALto_string"><span class="keyword">val</span> to_string</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> string</code></pre>
+<pre><span id="VALof_string"><span class="keyword">val</span> of_string</span> : <code class="type">string -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALof_string_slice"><span class="keyword">val</span> of_string_slice</span> : <code class="type">string -> int -> int -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALof_buffer"><span class="keyword">val</span> of_buffer</span> : <code class="type">Buffer.t -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">of_buffer b</code> creates a string that contains the same as <code class="code">b</code><br>
+</div>
+
+<pre><span id="VALof_gen"><span class="keyword">val</span> of_gen</span> : <code class="type">char <a href="Bigstring.html#TYPEgen">gen</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALsub_string"><span class="keyword">val</span> sub_string</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> int -> string</code></pre>
+<pre><span id="VALblit_of_string"><span class="keyword">val</span> blit_of_string</span> : <code class="type">string -> int -> <a href="Bigstring.html#TYPEt">t</a> -> int -> int -> unit</code></pre>
+<pre><span id="VALto_seq"><span class="keyword">val</span> to_seq</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> char <a href="Bigstring.html#TYPEsequence">sequence</a></code></pre>
+<pre><span id="VALto_gen"><span class="keyword">val</span> to_gen</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> char <a href="Bigstring.html#TYPEgen">gen</a></code></pre>
+<pre><span id="VALto_seq_slice"><span class="keyword">val</span> to_seq_slice</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> int -> char <a href="Bigstring.html#TYPEsequence">sequence</a></code></pre>
+<pre><span id="VALto_gen_slice"><span class="keyword">val</span> to_gen_slice</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> int -> int -> char <a href="Bigstring.html#TYPEgen">gen</a></code></pre>
+<pre><span id="VALto_buffer"><span class="keyword">val</span> to_buffer</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> Buffer.t -> unit</code></pre><div class="info ">
+Add the whole string at the end of the buffer<br>
+</div>
+
+<pre><span id="VALprint"><span class="keyword">val</span> print</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> <a href="Bigstring.html#TYPEprinter">printer</a></code></pre><div class="info ">
+Pretty-print the string into a formatter, surrounded with '"'<br>
+</div>
+<br>
+<h2 id="2_Utils">Utils</h2><br>
+
+<pre><span id="VALconcat"><span class="keyword">val</span> concat</span> : <code class="type">string -> <a href="Bigstring.html#TYPEt">t</a> list -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">concat set l</code> concatenates the list <code class="code">l</code>, inserting <code class="code">sep</code> between
+    each pair of string.<br>
+</div>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">f:(char -> char) -> <a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">f:(int -> char -> char) -> <a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre>
+<pre><span id="VALlowercase"><span class="keyword">val</span> lowercase</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Copy of the string with all characters in lowercase (see <code class="code">Char.lowercase</code>)<br>
+</div>
+
+<pre><span id="VALuppercase"><span class="keyword">val</span> uppercase</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+Copy of the string with all characters in uppercase (see <code class="code">Char.uppercase</code>)<br>
+</div>
+
+<pre><span id="VALtrim"><span class="keyword">val</span> trim</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">trim s</code> returns a slice of <code class="code">s</code> without the leading and trailing
+    whitespaces, where whitespaces are defined identically to <code class="code">String.trim</code>.
+    note that it does not copy the substring, but returns a slice!<br>
+<b>Returns</b> a slice of <code class="code">s</code>, or empty if <code class="code">s</code> is totally composed of whitespaces<br>
+</div>
+
+<pre><span id="VALindex"><span class="keyword">val</span> index</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> c:char -> int</code></pre><div class="info ">
+<code class="code">index s ~c</code> returns the index of the first
+    occurrence of character <code class="code">c</code> in string <code class="code">s</code>.<br>
+<b>Raises</b> <code>Not_found</code> if <code class="code">c</code> does not occurr in <code class="code">s</code><br>
+</div>
+
+<pre><span id="VALrindex"><span class="keyword">val</span> rindex</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> c:char -> int</code></pre><div class="info ">
+<code class="code">rindex s ~c</code> returns the index of the last
+    occurrence of character <code class="code">c</code> in string <code class="code">s</code>.<br>
+<b>Raises</b> <code>Not_found</code> if <code class="code">c</code> does not occurr in <code class="code">s</code><br>
+</div>
+
+<pre><span id="VALindex_pred"><span class="keyword">val</span> index_pred</span> : <code class="type">f:(char -> bool) -> <a href="Bigstring.html#TYPEt">t</a> -> int</code></pre><div class="info ">
+<code class="code">index_pred ~f s</code> returns the index of the first char in <code class="code">s</code> that
+    satisfies <code class="code">s</code>.<br>
+<b>Raises</b> <code>Not_found</code> if no character in <code class="code">s</code> satisfies <code class="code">p</code><br>
+</div>
+
+<pre><span id="VALrindex_pred"><span class="keyword">val</span> rindex_pred</span> : <code class="type">f:(char -> bool) -> <a href="Bigstring.html#TYPEt">t</a> -> int</code></pre><div class="info ">
+<code class="code">rindex_pred ~f s</code> returns the index of the last char in <code class="code">s</code> that
+    satisfies <code class="code">s</code>.<br>
+<b>Raises</b> <code>Not_found</code> if no character in <code class="code">s</code> satisfies <code class="code">p</code><br>
+</div>
+
+<pre><span id="VALcontains"><span class="keyword">val</span> contains</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> c:char -> bool</code></pre><div class="info ">
+<code class="code">String.contains s c</code> tests if character <code class="code">c</code> appears in the string <code class="code">s</code>.<br>
+</div>
+
+<pre><span id="VALfor_all"><span class="keyword">val</span> for_all</span> : <code class="type">f:(char -> bool) -> <a href="Bigstring.html#TYPEt">t</a> -> bool</code></pre><div class="info ">
+True for all chars?<br>
+</div>
+
+<pre><span id="VALexists"><span class="keyword">val</span> exists</span> : <code class="type">f:(char -> bool) -> <a href="Bigstring.html#TYPEt">t</a> -> bool</code></pre><div class="info ">
+True for some char?<br>
+</div>
+
+<pre><span id="VALsplit"><span class="keyword">val</span> split</span> : <code class="type">by:char -> <a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> list</code></pre><div class="info ">
+<code class="code">split s ~by</code> splits <code class="code">s</code> along the occurrences of <code class="code">by</code>.<br>
+</div>
+
+<pre><span id="VALsplit_gen"><span class="keyword">val</span> split_gen</span> : <code class="type">by:char -> <a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> <a href="Bigstring.html#TYPEgen">gen</a></code></pre><div class="info ">
+Same as <a href="Bigstring.html#VALsplit"><code class="code">Bigstring.split</code></a> but returns a generator<br>
+</div>
+
+<pre><span id="VALlines"><span class="keyword">val</span> lines</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> list</code></pre><div class="info ">
+<code class="code">lines s</code> returns a list of the lines of <code class="code">s</code> (splits along '\n')<br>
+</div>
+
+<pre><span id="VALlines_gen"><span class="keyword">val</span> lines_gen</span> : <code class="type"><a href="Bigstring.html#TYPEt">t</a> -> <a href="Bigstring.html#TYPEt">t</a> <a href="Bigstring.html#TYPEgen">gen</a></code></pre><div class="info ">
+<code class="code">lines_gen s</code> returns a generator of the lines of <code class="code">s</code> (splits along '\n')
+    where every line is a slice of <code class="code">s</code><br>
+</div>
+<br>
+<h2 id="2_Memorymap">Memory-map</h2><br>
+
+<pre><span id="VALwith_map_file"><span class="keyword">val</span> with_map_file</span> : <code class="type">?pos:int64 -><br>       ?len:int -><br>       ?mode:int -><br>       ?flags:Pervasives.open_flag list -><br>       ?shared:bool -> string -> (<a href="Bigstring.html#TYPEt">t</a> -> 'a) -> 'a</code></pre><div class="info ">
+<code class="code">with_map_file name f</code> maps the file into memory, opening it, and
+    call <code class="code">f</code> with a slice <code class="code">pos.... pos+len</code> of the bytes of the file
+    where <code class="code">len</code> is the length of the file if not provided.
+    When <code class="code">f</code> returns, the file is closed.<br>
+</div>
+<div class="param_info"><code class="code">pos</code> : offset in the file (default 0)</div>
+<div class="param_info"><code class="code">mode</code> : the mode for the file, if it's created</div>
+<div class="param_info"><code class="code">flags</code> : opening flags (default rdonly)
+    see <code class="code">Bigarray.Array1.map_file</code> for more details</div>
+<div class="param_info"><code class="code">shared</code> : if true, modifications are shared between processes that
+      have mapped this file (requires the filedescr to be open in write mode).</div>
+
+<pre><span id="VALmap_file_descr"><span class="keyword">val</span> map_file_descr</span> : <code class="type">?pos:int64 -> ?shared:bool -> Unix.file_descr -> int -> <a href="Bigstring.html#TYPEt">t</a></code></pre><div class="info ">
+<code class="code">map_file_descr descr len</code> is a lower-level access to an underlying file descriptor.<br>
+</div>
+<div class="param_info"><code class="code">shared</code> : if true, modifications are shared between processes that
+    have mapped this file (requires the filedescr to be open in write mode).
+    see <code class="code">Bigarray.Array1.map_file</code> for more details</div>
+</body></html>
