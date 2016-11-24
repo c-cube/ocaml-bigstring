@@ -2,7 +2,7 @@
 OPTS=-use-ocamlfind
 FLAGS= -w +a-4-44 -safe-string
 TARGETS = bigstring.cma bigstring.cmxa bigstring.cmxs
-TO_INSTALL = $(addprefix _build/src/, $(TARGETS) bigstring.cmi bigstring.a *.mli) \
+TO_INSTALL = $(addprefix _build/src/, $(TARGETS) bigstring.cmi bigstring.cmx bigstring.a *.mli) \
 	     $(wildcard _build/src/*.cmt{,i})
 
 all:
