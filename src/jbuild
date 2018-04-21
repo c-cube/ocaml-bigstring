@@ -1,0 +1,7 @@
+(jbuild_version 1)
+
+(library
+ ((name        bigstring)
+  (public_name bigstring)
+  (synopsis "Bigstring built on top of bigarrays, and convenient functions.")
+  (libraries (bytes bigarray))))
