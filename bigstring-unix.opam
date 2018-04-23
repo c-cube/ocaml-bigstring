@@ -1,5 +1,5 @@
 opam-version: "1.2"
-name: "bigstring"
+name: "bigstring-unix"
 version: "0.1.1"
 authors: "Simon Cruanes <simon.cruanes.2007@m4x.org>"
 maintainer: "Simon Cruanes <simon.cruanes.2007@m4x.org>"
@@ -16,5 +16,6 @@ depends: [
   "jbuilder" {build & >= "1.0+beta19.1"}
   "base-bigarray"
   "base-bytes"
+  "base-unix"
 ]
 
