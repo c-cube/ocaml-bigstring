@@ -286,9 +286,9 @@ let map ~f s = init (length s) (fun i -> f (unsafe_get s i))
 
 let mapi ~f s = init (length s) (fun i -> f i (unsafe_get s i))
 
-let lowercase s = map ~f:Char.lowercase s
+let lowercase s = map ~f:Char.lowercase_ascii s
 
-let uppercase s = map ~f:Char.uppercase s
+let uppercase s = map ~f:Char.uppercase_ascii s
 
 let index_pred ~f s =
   let rec aux f s i =
