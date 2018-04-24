@@ -13,7 +13,7 @@ if [ -n "${OPAM_SWITCH}" ]; then
 fi
 eval `opam config env`
 
-opam install ocamlfind
+opam install ocamlfind jbuilder
 
 export OCAMLRUNPARAM=b
 
