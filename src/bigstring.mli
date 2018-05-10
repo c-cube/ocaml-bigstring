@@ -16,6 +16,9 @@ type t = (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
 val create : int -> t
 (** Create a new bigstring of the given size. Content is arbitrary. *)
 
+val make : int -> char -> t
+(** Create a new bigstring of the given size filled with [c]. *)
+
 val empty : t
 (** Empty string *)
 

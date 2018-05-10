@@ -15,6 +15,11 @@ let create size = B.create Bigarray.char Bigarray.c_layout size
 
 let empty = create 0
 
+let make sz c =
+  let buf = create sz in
+  B.fill buf c;
+  buf
+
 let init size f =
   let a = create size in
   for i = 0 to size-1 do
