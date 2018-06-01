@@ -12,4 +12,4 @@
   (public_name bigstring-unix)
   (modules (Bigstring_unix))
   (synopsis "Bigstrings from Unix memory mapping.")
-  (libraries (bigstring))))
+  (libraries (bigstring unix))))
