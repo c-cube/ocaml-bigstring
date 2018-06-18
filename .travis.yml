@@ -1,20 +1,15 @@
 language: c
-sudo: false
-addons:
-  apt:
-    sources:
-    - avsm
-    packages:
-    - ocaml
-    - opam
-
-script: bash -ex .travis-ci.sh
+install: wget https://raw.githubusercontent.com/ocaml/ocaml-ci-scripts/master/.travis-docker.sh
+script: bash -ex .travis-docker.sh
+services:
+- docker
 env:
-  - OPAM_SWITCH=system
-  - OPAM_SWITCH=4.01.0
-  - OPAM_SWITCH=4.02.2
-  - OPAM_SWITCH=4.02.3
-  - OPAM_SWITCH=4.03.0
-cache:
-  directories:
-  - $HOME/.opam
+  global:
+  - PINS="bigstring:. bigstring-unix:."
+  - DISTRO="ubuntu-16.04"
+  matrix:
+  #- PACKAGE="bigstring" OCAML_VERSION="4.02.3" DEPOPTS="base-unix"
+  - PACKAGE="bigstring" OCAML_VERSION="4.03.0" DEPOPTS="base-unix"
+  - PACKAGE="bigstring" OCAML_VERSION="4.04.2" DEPOPTS="base-unix"
+  - PACKAGE="bigstring" OCAML_VERSION="4.05.0" DEPOPTS="base-unix"
+  - PACKAGE="bigstring" OCAML_VERSION="4.06.0" DEPOPTS="base-unix"
