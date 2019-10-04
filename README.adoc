@@ -1,6 +1,8 @@
 = Bigstring =
 :source-highlighter: pygments
 
+image::https://travis-ci.org/c-cube/ocaml-bigstring.svg?branch=master[alt="Build Status", link="https://travis-ci.org/c-cube/ocaml-bigstring"]
+
 A set of utils for dealing with `bigarrays` of `char` as if they were proper
 OCaml strings.
 
