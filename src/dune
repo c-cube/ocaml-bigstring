@@ -1,0 +1,14 @@
+(library
+ (name bigstring)
+ (public_name bigstring)
+ (modules Bigstring)
+ (synopsis "Bigstring built on top of bigarrays, and convenient functions.")
+ (libraries bytes bigarray))
+
+(library
+ (name bigstring_unix)
+ (public_name bigstring-unix)
+ (modules Bigstring_unix)
+ (flags :standard -warn-error -3) ; deprecation
+ (synopsis "Bigstrings from Unix memory mapping.")
+ (libraries bigstring unix))

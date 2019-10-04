@@ -10,10 +10,10 @@ dev-repo: "git://github.com/c-cube/ocaml-bigstring"
 
 available: [ ocaml-version >= "4.03.0" ]
 
-build: [ "jbuilder" "build" "-j" jobs "-p" name "@install" ]
-build-test: [ "jbuilder" "runtest" "-p" name "-j" jobs ]
+build: [ "dune" "build" "-p" name "-j" jobs ]
+build-test: [ "dune" "runtest" "-p" name "-j" jobs ]
 depends: [
-  "jbuilder" {build & >= "1.0+beta19.1"}
+  "dune" {>= "1.0"}
   "bigstring"
   "base-bigarray"
   "base-bytes"
