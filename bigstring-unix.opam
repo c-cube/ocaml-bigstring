@@ -3,7 +3,7 @@ name: "bigstring-unix"
 version: "0.2"
 authors: "Simon Cruanes <simon.cruanes.2007@m4x.org>"
 maintainer: "Simon Cruanes <simon.cruanes.2007@m4x.org>"
-synopsis: "A set of utils for dealing with `bigarrays` of `char` and memory-mapping"
+synopsis: "I/O functions for bigstrings using file descriptors and memory-maps"
 tags: [ "bigstring" "bigarray" ]
 homepage: "https://github.com/c-cube/ocaml-bigstring/"
 bug-reports: "https://github.com/c-cube/ocaml-bigstring/issues"
