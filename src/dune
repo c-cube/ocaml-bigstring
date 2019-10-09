@@ -20,4 +20,4 @@
  (modules Bigstring_compat Bigstring_unix)
  (flags :standard -warn-error -3) ; deprecation
  (synopsis "Bigstrings from Unix memory mapping.")
- (libraries bigstring unix))
+ (libraries bigarray unix))
