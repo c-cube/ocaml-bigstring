@@ -1,12 +1,12 @@
 all: build test
 
 build:
-	dune build @install
+	@dune build @install
 
 test:
-	dune build @runtest
+	@dune runtest
 
 clean:
-	dune clean
+	@dune clean
 
 .PHONY: clean all test build
