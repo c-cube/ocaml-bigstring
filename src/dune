@@ -1,3 +1,8 @@
+(rule
+ (target bigstring_compat.ml)
+ (action (with-stdout-to %{target}
+  (run %{project_root}/configure.bc))))
+
 (library
  (name bigstring)
  (public_name bigstring)
@@ -8,7 +13,7 @@
 (library
  (name bigstring_unix)
  (public_name bigstring-unix)
- (modules Bigstring_unix)
+ (modules Bigstring_compat Bigstring_unix)
  (flags :standard -warn-error -3) ; deprecation
  (synopsis "Bigstrings from Unix memory mapping.")
  (libraries bigstring unix))
