@@ -4,7 +4,8 @@
 (** {2 Memory-map} *)
 
 let map_file_descr ?pos ?(shared=false) fd len =
-  Bigarray.Array1.map_file fd ?pos Bigarray.char Bigarray.c_layout shared len
+  Bigarray.array1_of_genarray @@
+    Bigstring_compat.map_file fd ?pos Bigarray.char Bigarray.c_layout shared [|len|]
 
 let with_map_file ?pos ?len ?(mode=0o644) ?(flags=[Open_rdonly]) ?shared name f =
   let ic = open_in_gen flags mode name in
