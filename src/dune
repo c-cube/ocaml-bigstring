@@ -3,8 +3,8 @@
  (modules Configure))
 
 (rule
- (target bigstring_compat.ml)
- (action (with-stdout-to %{target}
+ (targets bigstring_compat.ml)
+ (action (with-stdout-to %{targets}
   (run ./configure.bc))))
 
 (library
