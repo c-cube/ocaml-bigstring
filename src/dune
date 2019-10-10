@@ -1,7 +1,11 @@
+(executable
+ (name configure)
+ (modules Configure))
+
 (rule
  (target bigstring_compat.ml)
  (action (with-stdout-to %{target}
-  (run %{project_root}/configure.bc))))
+  (run ./configure.bc))))
 
 (library
  (name bigstring)
