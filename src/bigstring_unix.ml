@@ -22,8 +22,8 @@ let get_bounds name ?(off=0) ?len t =
   then invalid_bounds name buffer_len off len
   else (off, len)
 
-external read_fd  : Unix.file_descr -> Bigstring.t -> int -> int -> int = "bigstring_read"
-external write_fd : Unix.file_descr -> Bigstring.t -> int -> int -> int = "bigstring_write"
+external read_fd  : Unix.file_descr -> t -> int -> int -> int = "bigstring_read"
+external write_fd : Unix.file_descr -> t -> int -> int -> int = "bigstring_write"
 
 let read fd ?off ?len t =
   let off, len = get_bounds "read" ?off ?len t in
