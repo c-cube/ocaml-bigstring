@@ -17,5 +17,6 @@ depends: [
   "base-bigarray"
   "base-bytes"
   "ocaml" {>= "4.03.0"}
+  "alcotest" {with-test}
 ]
 
