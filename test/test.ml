@@ -18,7 +18,9 @@ let bigstring_unix =
       Bigstring.iter (check char "post untouched" empty) post;
     in
     match Bigstring_unix.read source sub ?off ?len with
-    | exception (Unix.Unix_error(Unix.EAGAIN, _, _) as e)
+    | exception (Unix.Unix_error(Unix.EAGAIN, _, _) as e) ->
+      check_buf 0;
+      raise e
     | exception (Unix.Unix_error(Unix.EWOULDBLOCK, _, _) as e) ->
       check_buf 0;
       raise e
