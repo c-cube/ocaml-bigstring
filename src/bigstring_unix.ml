@@ -9,7 +9,7 @@ let get_bounds name ?(off=0) ?len t =
   let buffer_len = Bigarray.Array1.dim t in
   let len = match len with
     | Some len -> len
-    | None -> buffer_len
+    | None -> buffer_len - off
   in
   if len < 0 || off < 0 || buffer_len - off < len
   then invalid_arg ("Bigstring_unix." ^ name)
