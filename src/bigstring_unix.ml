@@ -5,13 +5,6 @@ type t = (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
 
 (** {2 I/O} *)
 
-let[@inline never] invalid_bounds op buffer_len off len =
-  let message =
-    Printf.sprintf "Bigstring_unix.%s invalid range: { buffer_len: %d, off: %d, len: %d }"
-    op buffer_len off len
-  in
-  raise (Invalid_argument message)
-
 let get_bounds name ?(off=0) ?len t =
   let buffer_len = Bigarray.Array1.dim t in
   let len = match len with
@@ -19,7 +12,7 @@ let get_bounds name ?(off=0) ?len t =
     | None -> buffer_len
   in
   if len < 0 || off < 0 || buffer_len - off < len
-  then invalid_bounds name buffer_len off len
+  then invalid_arg ("Bigstring_unix." ^ name)
   else (off, len)
 
 external read_fd  : Unix.file_descr -> t -> int -> int -> int = "bigstring_read"
