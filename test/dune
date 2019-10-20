@@ -2,7 +2,7 @@
  (name test)
  (modules test)
  (flags :standard -thread)
- (libraries alcotest bigstring bigstring_unix threads)
+ (libraries alcotest bigstring bigstring-unix threads)
  (action
   (setenv MALLOC_CHECK_ 3
     (setenv MALLOC_PERTURB_ 195
