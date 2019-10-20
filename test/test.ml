@@ -2,7 +2,9 @@ open Alcotest
 
 let bigstring_unix =
   let empty = char_of_int 0xdf in
-  let source, drain = Unix.pipe ~cloexec:true () in
+  let source, drain = Unix.pipe () in
+  Unix.set_close_on_exec source;
+  Unix.set_close_on_exec drain;
   Unix.set_nonblock source;
   Unix.set_nonblock drain;
   let check_read ?(shift=0) ?off ?len () =
