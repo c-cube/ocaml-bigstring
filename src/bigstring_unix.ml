@@ -15,8 +15,8 @@ let get_bounds name ?(off=0) ?len t =
   then invalid_arg ("Bigstring_unix." ^ name)
   else (off, len)
 
-external read_fd  : Unix.file_descr -> t -> int -> int -> int = "bigstring_read"
-external write_fd : Unix.file_descr -> t -> int -> int -> int = "bigstring_write"
+external read_fd  : Unix.file_descr -> t -> int -> int -> int = "ocaml_bigstring_unix_read"
+external write_fd : Unix.file_descr -> t -> int -> int -> int = "ocaml_bigstring_unix_write"
 
 let read fd ?off ?len t =
   let off, len = get_bounds "read" ?off ?len t in

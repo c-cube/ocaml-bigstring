@@ -22,7 +22,7 @@
 #include <caml/threads.h>
 
 CAMLprim value
-bigstring_read(value vfd, value vba, value voff, value vlen)
+ocaml_bigstring_unix_read(value vfd, value vba, value voff, value vlen)
 {
     void *iobuf = ((char *)Caml_ba_data_val(vba)) + Unsigned_long_val(voff);
 #ifdef Handle_val
@@ -90,7 +90,7 @@ check_error:
 }
 
 CAMLprim value
-bigstring_write(value vfd, value vba, value voff, value vlen)
+ocaml_bigstring_unix_write(value vfd, value vba, value voff, value vlen)
 {
     char *iobuf = ((char *)Caml_ba_data_val(vba)) + Unsigned_long_val(voff);
 #ifdef Handle_val
