@@ -29,8 +29,8 @@ ocaml_bigstring_unix_read(value vfd, value vba, value voff, value vlen)
     unsigned len;
     int err;
 
-    if (Descr_kind_val(fd) == KIND_SOCKET) {
-      SOCKET s = Socket_val(fd);
+    if (Descr_kind_val(vfd) == KIND_SOCKET) {
+      SOCKET s = Socket_val(vfd);
       caml_release_runtime_system();
       if ((err = recv(s, iobuf, Unsigned_int_val(vlen), 0)) < 0)
         err = WSAGetLastError();
@@ -40,7 +40,7 @@ ocaml_bigstring_unix_read(value vfd, value vba, value voff, value vlen)
       }
       caml_acquire_runtime_system();
     } else {
-      HANDLE h = Handle_val(fd);
+      HANDLE h = Handle_val(vfd);
       caml_release_runtime_system();
       if (ReadFile(h, iobuf, Unsigned_int_val(vlen), &len, NULL))
         err = 0;
@@ -97,7 +97,7 @@ ocaml_bigstring_unix_write(value vfd, value vba, value voff, value vlen)
     unsigned len;
     int err;
 
-    if (Descr_kind_val(fd) == KIND_SOCKET) {
+    if (Descr_kind_val(vfd) == KIND_SOCKET) {
       SOCKET s = Socket_val(vfd);
       caml_release_runtime_system();
       if ((err = send(s, iobuf, Unsigned_int_val(vlen), 0)) < 0)
