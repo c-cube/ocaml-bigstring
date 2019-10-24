@@ -13,6 +13,7 @@ let bigstring_unix =
     let pre = Bigstring.sub buf 0 (10+off') in
     let sub = Bigstring.sub buf 10 30 in
     let check_buf read_len =
+      Gc.compact ();
       let read_sub = Bigstring.sub sub off' read_len in
       let post = Bigstring.sub buf (10+off'+read_len) (40 - off' - read_len) in
       Bigstring.iter (check char "pre untouched" empty) pre;
