@@ -1,9 +1,9 @@
 open Alcotest
 
-let socketpair ?cloexec _dom ty proto =
+let socketpair _dom ty proto =
   let open Unix in
-  let s = socket ?cloexec PF_INET ty proto
-  and c = socket ?cloexec PF_INET ty proto in
+  let s = socket PF_INET ty proto
+  and c = socket PF_INET ty proto in
   bind s (ADDR_INET (inet_addr_loopback, 0));
   let saddr = getsockname s in
   match ty with
@@ -25,7 +25,7 @@ let socketpair ?cloexec _dom ty proto =
       let s, caddr =
         match select [s] [] [] 0.1 with
         | [s'], [], [] when s' == s ->
-            let ret = accept ?cloexec s in
+            let ret = accept s in
             close s;
             ret
         | [], [], [] -> failwith "Unix.socketpair: timeout waiting for client"
@@ -52,7 +52,7 @@ let socketpair ?cloexec _dom ty proto =
 
 let bigstring_unix =
   let empty = char_of_int 0xdf in
-  let source, drain = socketpair ~cloexec:true Unix.PF_UNIX Unix.SOCK_STREAM 0 in
+  let source, drain = socketpair Unix.PF_UNIX Unix.SOCK_STREAM 0 in
   Unix.set_nonblock source;
   Unix.set_nonblock drain;
   let check_read ?(shift=0) ?off ?len () =
