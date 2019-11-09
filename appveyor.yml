@@ -1,0 +1,13 @@
+install:
+  - cd "%APPVEYOR_BUILD_FOLDER%"
+  - appveyor_init.cmd
+environment:
+  OCAMLTOP_INCLUDE_PATH: 'C:\projects\ocaml-bigstring\.opam\ocaml-system\lib\toplevel'
+  OCAMLRUNPARAM: "bs=8M"
+build_script:
+  - cd "%APPVEYOR_BUILD_FOLDER%"
+  - opam init --no-setup --yes --compiler=ocaml-system https://github.com/madroach/opam-repository.git
+  - opam pin --no-action --verbose stdlib-shims https://github.com/ocaml/stdlib-shims.git
+  - opam pin --no-action --verbose dune https://github.com/madroach/dune.git
+  - opam install --yes --verbose --jobs=1 alcotest
+  - opam exec -- dune runtest
