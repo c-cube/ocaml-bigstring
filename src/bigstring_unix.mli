@@ -6,6 +6,15 @@ type t = (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
     on [Bigstring].
     @since 0.3 *)
 
+(** {2 I/O} *)
+
+(** These I/O functions are missing from the Bigarray library.
+    They release the runtime during I/O. *)
+
+val read  : Unix.file_descr -> ?off:int -> ?len:int -> t -> int
+val write : Unix.file_descr -> ?off:int -> ?len:int -> t -> int
+
+
 (** {2 Memory-map} *)
 
 val with_map_file :
