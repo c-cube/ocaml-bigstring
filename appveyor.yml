@@ -1,14 +1,12 @@
+environment:
+  global:
+    OPAM: True
 install:
   - cd "%APPVEYOR_BUILD_FOLDER%"
   - appveyor DownloadFile "https://raw.githubusercontent.com/madroach/ocaml-appveyor/master/opam_init.cmd"
   - opam_init.cmd
 build_script:
   - cd "%APPVEYOR_BUILD_FOLDER%"
-  - echo OPAMROOT %OPAMROOT%
-  - echo OPAM_SWITCH_PREFIX %OPAM_SWITCH_PREFIX%
-  - echo CAML_LD_LIBRARY_PATH %CAML_LD_LIBRARY_PATH%
-  - echo OCAMLTOP_INCLUDE_PATH %OCAMLTOP_INCLUDE_PATH%
-  - echo OCAMLPATH %OCAMLPATH%
   - opam install --yes alcotest
   - dune build @install
 test_script:
