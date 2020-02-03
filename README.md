@@ -1,15 +1,11 @@
-= Bigstring =
-:source-highlighter: pygments
-
-image::https://travis-ci.org/c-cube/ocaml-bigstring.svg?branch=master[alt="Build Status", link="https://travis-ci.org/c-cube/ocaml-bigstring"]
+# Bigstring [![Build Status](https://travis-ci.org/c-cube/ocaml-bigstring.svg?branch=master)](https://travis-ci.org/c-cube/ocaml-bigstring)
 
 A set of utils for dealing with `bigarrays` of `char` as if they were proper
 OCaml strings.
 
-== Usage
+## Usage
 
-[source,OCaml]
-----
+```ocaml
 #require "bigstring";;
 #install_printer Bigstring.print;;
 module B = Bigstring;;
@@ -31,13 +27,12 @@ val str : string = "__"
 
 # s2;;
 - : B.t = "a__d"
-----
+```
 
-== Documentation
+## Documentation
 
-- http://c-cube.github.io/ocaml-bigstring/dev[dev]
-- http://c-cube.github.io/ocaml-bigstring/0.1[0.1]
+http://c-cube.github.io/ocaml-bigstring/
 
-== License
+## License
 
 This code is free, under the BSD license.
