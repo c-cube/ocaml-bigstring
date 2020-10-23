@@ -1,5 +1,7 @@
 # Bigstring [![Build Status](https://travis-ci.org/c-cube/ocaml-bigstring.svg?branch=master)](https://travis-ci.org/c-cube/ocaml-bigstring)
 
+**NOTE**: I recommend using [bigstringaf](https://github.com/inhabitedtype/bigstringaf) now. It has fast operations written in C and is better maintained.
+
 A set of utils for dealing with `bigarrays` of `char` as if they were proper
 OCaml strings.
 
