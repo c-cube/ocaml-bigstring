@@ -1,7 +1,8 @@
+module Unix_ = Unix
 open Alcotest
 
 let socketpair _dom ty proto =
-  let open Unix in
+  let open Unix_ in
   let s = socket PF_INET ty proto
   and c = socket PF_INET ty proto in
   bind s (ADDR_INET (inet_addr_loopback, 0));
@@ -51,6 +52,7 @@ let socketpair _dom ty proto =
       invalid_arg "Unix.socketpair: SOCK_RAW not supported"
 
 let bigstring_unix =
+  let module Unix = Unix_ in
   let empty = char_of_int 0xdf in
   let source, drain = socketpair Unix.PF_UNIX Unix.SOCK_STREAM 0 in
   Unix.set_nonblock source;
